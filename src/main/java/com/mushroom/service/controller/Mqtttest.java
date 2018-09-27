@@ -10,6 +10,12 @@ import com.mushroom.service.model.SensorInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.PostConstruct;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Controller
 public class Mqtttest implements MqttCallback{
 
@@ -19,11 +25,7 @@ public class Mqtttest implements MqttCallback{
     MqttClient client;
     public Mqtttest() {
     }
-
-    public static void main(String[] args) {
-        new Mqtttest().doDemo();
-    }
-
+    @PostConstruct
     public void doDemo() {
         try {
             client = new MqttClient("tcp://182.163.112.207:1883", "Sending");
@@ -66,11 +68,14 @@ public class Mqtttest implements MqttCallback{
             System.out.println("Temperature : "+temp);
             System.out.println("CO2 : "+co2);
             System.out.println("Light : "+light);
-            String date = "2018.09.11";
-            String time = "11:00:00";
+            //String date = "2018.09.11";
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+            Date date = new Date();
+          //  String time = "11:00:00";
             SensorInfo sensorinfo = new SensorInfo();
-            sensorinfo.setDate(date);
-            sensorinfo.setTime(time);
+            sensorinfo.setDate(dateFormat.format(date));
+            sensorinfo.setTime(timeFormat.format(date));
             sensorinfo.setUser(user_id);
             sensorinfo.setDevice(device_id);
             sensorinfo.setTemperature(temp);
